@@ -38,6 +38,7 @@ const Page = () => {
     const submitAnswer = () => {
         axios.post("http://localhost:3000/answer", {
             name: name,
+            question: listQuestion.map((item) => item.question),
             answer: answerList
         }, {
             headers: {

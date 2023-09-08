@@ -8,18 +8,12 @@ const Detail = () => {
     const router = useRouter()
     const pathname = usePathname();
     const [answerList, setAnswerList] = useState()
-    const [questionList, setQuestionList] = useState()
 
     const getAnswer = () => {
         axios.get(`http://localhost:3000/answer/${pathname.split("/")[2]}`).then((res) => setAnswerList(res.data))
     }
 
-    const getQuestion = () => {
-        axios.get(`http://localhost:3000/question`).then((res) => setQuestionList(res.data))
-    }
-
     useEffect(() => {
-        getQuestion()
         getAnswer()
     }, [])
 
@@ -34,7 +28,7 @@ const Detail = () => {
                     {answerList?.answer?.map((item, index) => {
                         return (
                             <li key={index}>
-                                <p className="text-sm font-semibold">{questionList?.[0]?.question}</p>
+                                <p className="text-sm font-semibold">{answerList?.question?.[index]}</p>
                                 <p className="text-sm font-semibold">{item}</p>
                             </li>
                         )

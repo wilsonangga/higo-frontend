@@ -88,6 +88,26 @@ export default function Home() {
     })
   }
 
+  const deleteQuestion = (id) => {
+    Swal.fire({
+      title: 'Apakah kamu yakin untuk hapus?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Batalkan',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:3000/question/${id}`).then(() => {
+          Swal.fire('Terhapus', 'Pertanyaan berhasil dihapus.', 'success');
+          getQuestion();
+        })
+      } else {
+        // The user clicked "Cancel" or closed the dialog
+        Swal.fire('Batal', 'Pertanyaan batal dihapus.', 'info');
+      }
+    });
+  }
+
   const getQuestion = () => {
     axios.get("http://localhost:3000/question").then((res) => { setListQuestion(res.data); })
   }
@@ -129,7 +149,10 @@ export default function Home() {
               <div className="flex table-body py-2" key={index}>
                 <div className='flex-[0.2] font-medium text-sm'>{index + 1}</div>
                 <div className='flex-[0.6] font-medium text-sm'>{item?.question}</div>
-                <div className='flex-[0.2] font-medium text-sm text-[#008CFF] cursor-pointer' onClick={() => { editQuestion(item?._id) }}>Ubah</div>
+                <div className="flex flex-[0.2] gap-2">
+                  <div className='font-medium text-sm text-[#008CFF] cursor-pointer' onClick={() => { editQuestion(item?._id) }}>Ubah</div>
+                  <div className='font-medium text-sm text-red-600 cursor-pointer' onClick={() => { deleteQuestion(item?._id) }}>Hapus</div>
+                </div>
               </div>
             )
           })}
